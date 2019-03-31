@@ -11,7 +11,7 @@ Even if we normalize the data, the results had nothing change: still very bad.
 
 
 Plan for the second week:
-1. 把label为1的数据提取出来，让label为1的数据的比例大一些
+1. 把label为1的数据提取出来，让label为1的数据的比例大一些，然后看一下结果是否有好转
 2. 想办法检测outlier并去除：identify outlier
 3. 需要降维吗？
 4. 能否试一下：不以整体精确度为导向，而是以“把1都预测对，然后再考虑0”为导向
