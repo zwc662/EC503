@@ -1,4 +1,5 @@
 #EC503 Minutes of Meeting
+
 Firstly, we use several algorithms and try to classify the data.
 We used DRO, Logistic Regression, KNN, SVM, Decision Tree. 🌲 
 And we found that the result was bad.
