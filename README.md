@@ -24,14 +24,15 @@ Plan for the second week:
 6. 查一下对数据有bia的情况下的检测方法
 
 
-Suggestion:
-<ul>Survey on the problem of bias in dataset.
+Suggestions:
+
+<ul>Survey on the problem of bias in dataset.</ul>
   <ol><a href="http://undoingbias.csail.mit.edu">Undoing the Damage of Dataset Bias</a></ol
   <ol><a href="http://people.csail.mit.edu/torralba/research/bias/">Unbiased Look at Dataset Bias</a></ol>
-  </ul>
 
-<ul>Survey on outlier detection problems.
+
+<ul>Survey on outlier detection problems.</ul>
 <ol><a href="https://arxiv.org/pdf/1401.6424.pdf">Toward Supervised Anomaly Detection</a></ol>
 <ol><a href="https://dl.acm.org/citation.cfm?id=1263334">K-Means+ID3: A/ Novel Method for Supervised Anomaly Detection by Cascading K-Means Clustering and ID3 Decision Tree Learning Methods</a><ol>
 <ol><a href="https://dl.acm.org/citation.cfm?id=1541882">Anomaly detection: A survey</a></ol>
-    </ul>
+
