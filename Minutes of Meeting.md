@@ -15,6 +15,6 @@ Plan for the second week:
 2. 想办法检测outlier并去除：identify outlier
 3. 需要降维吗？
 4. 能否试一下：不以整体精确度为导向，而是以“把1都预测对，然后再考虑0”为导向
-5. 看一下kernel
+5. 看一下Kaggle里面的kernel https://www.kaggle.com/c/santander-customer-transaction-prediction/kernels
 6. 查一下对数据有bia的情况下的检测方法
 
