@@ -27,8 +27,8 @@ Plan for the second week:
 Suggestions:
 
 <ul>Survey on the problem of bias in dataset.</ul>
-  <ol><a href="http://undoingbias.csail.mit.edu">Undoing the Damage of Dataset Bias</a></ol
-  <ol><a href="http://people.csail.mit.edu/torralba/research/bias/">Unbiased Look at Dataset Bias</a></ol>
+<ol><a href="http://undoingbias.csail.mit.edu">Undoing the Damage of Dataset Bias</a></ol
+<ol><a href="http://people.csail.mit.edu/torralba/research/bias/">Unbiased Look at Dataset Bias</a></ol>
 
 
 <ul>Survey on outlier detection problems.</ul>
