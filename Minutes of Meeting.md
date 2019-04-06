@@ -18,3 +18,13 @@ Plan for the second week:
 5. 看一下Kaggle里面的kernel https://www.kaggle.com/c/santander-customer-transaction-prediction/kernels
 6. 查一下对数据有bia的情况下的检测方法
 
+
+
+2019.4.6 15:00 yzsu
+重新分配了数据label的密度，使得label为1的data与label为0的data的比例为1:1（原本是1:9），然后再进行测量，得到的结果是：
+ROC AUC:0.788
+Accuracy:0.787
+需要注意的是，我使用的SVM是sklearn里的sklearn.svm.SVC(),默认是使用了kernel的，使用的是‘rbf’即Gaussian Kernel。
+然后试了一下使用Polynomial Kernel，默认的Degree = 3，得到的结果是：
+ROC AUC:0.780
+Accuracy:0.779
