@@ -36,3 +36,19 @@ Suggestions:
   * <a href="https://dl.acm.org/citation.cfm?id=1263334">K-Means+ID3: A/ Novel Method for Supervised Anomaly Detection by Cascading K-Means Clustering and ID3 Decision Tree Learning Methods</a>
   * <a href="https://dl.acm.org/citation.cfm?id=1541882">Anomaly detection: A survey</a>
 
+* <a href="https://imbalanced-learn.readthedocs.io/en/stable/over_sampling.html#from-random-over-sampling-to-smote-and-adasyn">Imbalanced Learn</a>
+
+20190422
+====
+
+* 参考文章<a href="https://sci2s.ugr.es/keel/pdf/algorithm/congreso/2008-He-ieee.pdf">ADASYN: Adaptive Synthetic Sampling Approach for Imbalanced Learning</a>. 用 Synthetic data generation来产生新数据点做训练，适用于所有machine learning方法。
+
+* 对于SVM, 可以参考以下两篇结合active learning和svm的文章。
+ * S. Ertekin, J. Huang, and C. L. Giles, “Active Learning for Class Imbalance Problem,” in Proc. Annual Int. ACM SIGIR Conf. Research and development in information retrieval, pp. 823 - 824, Amsterdam, Netherlands, 2007.
+ * S. Ertekin, J. Huang, L. Bottou, C. L. Giles, “Learning on the Bor- der: Active Learning in Imbalanced Data Classification,” in CIKM’07, November 6-8, 2007, Lisboa, Portugal.
+
+* 对于NN，可以参考以下文章
+ * Z. H. Zhou and X. Y. Liu, “Training Cost-Sensitive Neural Networks with Methods Addressing the Class Imbalance Problem,” IEEE Trans- actions on Knowledge and Data Engineering, vol. 18, no. 1, pp. 63-77, 2006.
+
+
+ 
