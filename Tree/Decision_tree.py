@@ -51,7 +51,7 @@ def main():
       
     # Building Phase 
 
-    Dataset = pd.read_csv("/Users/snow/Desktop/santander/train.csv", sep = ',', header = None)
+    Dataset = pd.read_csv("../train.csv", sep = ',', header = None)
 
     # split the dataset
     # seperating the label and features 
