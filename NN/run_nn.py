@@ -27,10 +27,11 @@ dataset = create_dataset(path = 'train_SMOTE.csv')
 
 net = mlp(size_input, size_output).to(device)
 criterion = torch.nn.CrossEntropyLoss()
-optimizer = torch.optim.SGD(net.parameters(), lr=1e-4, momentum = 0.9)
+#optimizer = torch.optim.SGD(net.parameters(), lr=1e-4, momentum = 0.9)
+optimizer = torch.optim.Adam(net.parameters(), lr=0.0001, betas=(0.9, 0.999), eps=1e-08, weight_decay=0)
 
 
-for epoch in range(50):  # loop over the dataset multiple times
+for epoch in range(100):  # loop over the dataset multiple times
     dataloader = data_utils.DataLoader(dataset, batch_size = size_batch, shuffle = True)
 
     running_loss = 0.0
@@ -57,6 +58,8 @@ for epoch in range(50):  # loop over the dataset multiple times
             print('[%d, %5d] loss: %.3f' %
                   (epoch + 1, i + 1, running_loss / 2000))
             running_loss = 0.0
+    
+    torch.save(net.state_dict(), str('checkpoints/nn' + str(epoch) + '.pt'))
 
 print('Finished Training')
 
@@ -66,7 +69,7 @@ tn = 0
 fn = 0
 
 test = True
-dataset = create_dataset()
+dataset = create_dataset(path = 'train.csv')
 dataloader = data_utils.DataLoader(dataset, batch_size = size_batch, shuffle = True)
 corr = 0
 tot = 0
@@ -77,7 +80,7 @@ if test == True:
         inputs = inputs.float().to(device)
 
         outputs = net(inputs).detach()
-        outputs = torch.squeeze(torch.argmax(torch.reshape(outputs, (size_batch, size_output)), 1)).cpu().numpy()
+        outputs = torch.squeeze(torch.argmax(outputs, 1)).cpu().numpy()
         labels = labels.numpy()
 
         corr = corr + np.sum((outputs == labels).astype(int))
@@ -88,6 +91,6 @@ if test == True:
         tn += np.sum((outputs == 0) * (labels == 0))
         fn += np.sum((outputs == 0) * (labels == 1))
 
-print("Accuracy: %f" % corr * 1.0/tot)
+print("Accuracy: %f" % (corr * 1.0/tot))
 print(tp, fp, tn, fn)
-print("Precision: {}\n Recall: {}\n".format(tp * 1.0/(tp + fp * 1.0), tp * 1.0/(tp + fn * 1.0)))
+print("Precision: {}\n Recall: {}\n".format((tp * 1.0/(tp + fp * 1.0)), (tp * 1.0/(tp + fn * 1.0))))

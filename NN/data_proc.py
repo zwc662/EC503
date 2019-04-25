@@ -21,9 +21,12 @@ def preprocess_file(path = None):
 
 def preproc_data(path):
     X, Y = preprocess_file(path)
-    X_max = np.max(X, axis = 0)
-    X = X/X_max
-    return X, Y, X_max
+    X_mean = np.mean(X, axis = 0)
+    X_std = np.std(X, axis = 0)
+    X = (X - X_mean)/X_std
+    df = pd.DataFrame(np.concatenate((np.reshape(Y, [Y.shape[0], 1]), X), axis = 1))
+    df.to_csv('./train.csv', sep = ',', header = None)
+    return X, Y
 
 def create_dataset(path = None, proc_data = False, imb = None):
     if proc_data:
@@ -52,6 +55,6 @@ def create_dataset(path = None, proc_data = False, imb = None):
 
 
 if __name__ == "__main__":
-    create_dataset(imb = 'SMOTE')
-    create_dataset(imb = 'ADASYN')
+    create_dataset(proc_data = True, imb = 'SMOTE')
+    create_dataset(proc_data = True, imb = 'ADASYN')
 

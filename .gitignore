@@ -1,11 +1,2 @@
-*/train.csv
-*/test/csv
-*/sample_submission.csv
-*/*.pyc
-train.csv
-test.csv
-sample_submission.csv
+*.csv
 *.pyc
-*/__pycache__
-__pycache__
-
