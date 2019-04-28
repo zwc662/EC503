@@ -24,16 +24,27 @@ use_cuda = torch.cuda.is_available()
 device = torch.device("cuda" if use_cuda else "cpu")
 
 net = mlp(size_input, size_output).to(device)
+criterion = torch.nn.CrossEntropyLoss()
+#optimizer = torch.optim.SGD(net.parameters(), lr=1e-4, momentum = 0.9)
+optimizer = torch.optim.Adam(net.parameters(), lr=0.0001, betas=(0.9, 0.999), eps=1e-08, weight_decay=0)
 
-def train(path = 'train_SMOTE.csv', num_epoch = 100):
+def train(path = 'train_SMOTE.csv', checkpoint = None, num_epoch = 100):
     dataset = create_dataset(path)
+
+    epoch_init = -1
+    if checkpoint is not None:
+        checkpoint = torch.load(checkpoint)
+        net.load_state_dict(checkpoint['model_state_dict'])
+        optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
+        epoch_init = checkpoint['epoch']
+        loss = checkpoint['loss']
+        net.eval()
+        loss.backward()
+        optimizer.step()
     
-    criterion = torch.nn.CrossEntropyLoss()
-    #optimizer = torch.optim.SGD(net.parameters(), lr=1e-4, momentum = 0.9)
-    optimizer = torch.optim.Adam(net.parameters(), lr=0.0001, betas=(0.9, 0.999), eps=1e-08, weight_decay=0)
     
     
-    for epoch in range(num_epoch):  # loop over the dataset multiple times
+    for epoch in range(epoch_init + 1, num_epoch + epoch_init + 1):  # loop over the dataset multiple times
         dataloader = data_utils.DataLoader(dataset, batch_size = size_batch, shuffle = True)
     
         running_loss = 0.0
@@ -60,16 +71,15 @@ def train(path = 'train_SMOTE.csv', num_epoch = 100):
                 print('[%d, %5d] loss: %.3f' %
                       (epoch + 1, i + 1, running_loss / 2000))
                 running_loss = 0.0
-        
-        torch.save(net.state_dict(), str('checkpoints/nn' + str(epoch) + '.pt'))
+        if epoch % 10 == 0:
+            torch.save({'epoch': epoch, 'model_state_dict': net.state_dict(), 'optimizer_state_dict': optimizer.state_dict(), 'loss': loss}, str('checkpoints/mlp' + str(epoch) + '.pt'))
     
     print('Finished Training')
 
 
-def test(path = 'train.csv', checkpoint = 'checkpoints/nn1.pt'):
-    
+def test(path = 'train.csv', checkpoint = 'checkpoints/mlp1.pt'):
     checkpoint = torch.load(checkpoint)
-    net.load_state_dict(checkpoint)
+    net.load_state_dict(checkpoint['model_state_dict'])
 
     net.eval()
 
@@ -107,5 +117,5 @@ def test(path = 'train.csv', checkpoint = 'checkpoints/nn1.pt'):
 
 
 if __name__ == '__main__':
-    #train()
-    test(checkpoint = 'checkpoints/nn99.pt')
+    train(checkpoint = 'checkpoints/mlp500.pt', num_epoch = 500)
+    test(checkpoint = 'checkpoints/mlp1000.pt')
