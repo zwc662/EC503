@@ -33,7 +33,6 @@ def create_dataset(path = None, proc_data = False, imb = None):
         X, Y = preproc_data(path)
     else:
         X, Y = preprocess_file(path)
-    print(np.sum(Y, axis = 0))
     if imb is None:
         pass
     elif imb == 'SMOTE':
@@ -45,8 +44,8 @@ def create_dataset(path = None, proc_data = False, imb = None):
         df = pd.DataFrame(np.concatenate((np.reshape(Y, [Y.shape[0], 1]), X), axis = 1))
         df.to_csv('./train_ADASYN.csv', sep = ',', header = None)
  
-    print(X.shape, Y.shape)
-    print(np.sum(Y, axis = 0))
+    print("Data point size: {}".format(X.shape))
+    print("Number of positive examples: {}".format(np.sum(Y, axis = 0)))
 
 
     return data_utils.TensorDataset(torch.from_numpy(np.asarray(X)), torch.from_numpy(np.asarray(Y)))
