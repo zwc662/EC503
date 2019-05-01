@@ -9,7 +9,8 @@ def train_using_gini(X_train, y_train):
   
     # Creating the classifier object 
     clf_gini = tree.DecisionTreeClassifier(criterion = "gini", 
-            random_state = 100,max_depth=3, min_samples_leaf=5) 
+            #random_state = 50,max_depth=30, min_samples_leaf=5) 
+            random_state = 500,max_depth=200, min_samples_leaf=5) 
   
     # Performing training 
     clf_gini.fit(X_train, y_train) 
@@ -19,9 +20,9 @@ def train_using_gini(X_train, y_train):
 def tarin_using_entropy(X_train, y_train): 
   
     # Decision tree with entropy 
-    clf_entropy = tree.DecisionTreeClassifier( 
-            criterion = "entropy", random_state = 100, 
-            max_depth = 3, min_samples_leaf = 5) 
+    clf_entropy = tree.DecisionTreeClassifier(criterion = "entropy", 
+            #random_state = 50,max_depth= 30, min_samples_leaf=5) 
+            random_state = 500, max_depth = 200, min_samples_leaf = 5) 
   
     # Performing training 
     clf_entropy.fit(X_train, y_train) 
@@ -51,6 +52,7 @@ def main():
       
     # Building Phase 
 
+    '''
     Dataset = pd.read_csv("../train.csv", sep = ',', header = None)
 
     # split the dataset
@@ -75,17 +77,31 @@ def main():
 
     # Spliting the dataset into train and test
     X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size = 0.3, random_state = 100)
+    '''
+
+    data = pd.read_csv('../NN/train.csv', sep = ',', header = None)
+    X_train = data.values[1:, 2:]
+    Y_train = data.values[1:, 1]
+
+    if False and X_train.shape[0] > 300000: 
+        idx = np.random.randint(X_train.shape[0], size=200000)
+        X_train = X_train[idx, :]
+        Y_train = Y_train[idx]
 
     clf_gini = train_using_gini(X_train, Y_train) 
     clf_entropy = tarin_using_entropy(X_train, Y_train) 
     #print(Y_train.describe())
 
-    print(np.sum(Y_test))
 
 
 
     print("Results Using Gini Index:") 
+
+    data = pd.read_csv('../NN/train.csv', sep = ',', header = None)
+    X_test = data.values[1:, 2:]
+    Y_test = data.values[1:, 1]
       
+    print(np.sum(Y_test))
     # Prediction using gini 
     y_pred_gini = prediction(X_test, clf_gini) 
     cal_accuracy(Y_test, y_pred_gini) 

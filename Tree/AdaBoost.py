@@ -29,11 +29,11 @@ def load_data():
 
 def train(X_train, X_test, Y_train, Y_test, tree_type = 'gini'):
     if tree_type == 'gini':
-        tree_clf = tree.DecisionTreeClassifier(criterion = 'gini', random_state = 100, max_depth = 3, min_samples_leaf = 5)
+        tree_clf = tree.DecisionTreeClassifier(criterion = 'gini', random_state = 500, max_depth = 200, min_samples_leaf = 5)
     elif tree_type == 'entropy':
-        tree_clf = tree.DecisionTreeClassifier(criterion = 'entropy', random_state = 100, max_depth = 3, min_samples_leaf = 5)
+        tree_clf = tree.DecisionTreeClassifier(criterion = 'entropy', random_state = 500, max_depth = 200, min_samples_leaf = 5)
     else:
-        tree_clf = tree.DecisionTreeClassifier(criterion = 'gini', random_state = 100, max_depth = 3, min_samples_leaf = 5)
+        tree_clf = tree.DecisionTreeClassifier(criterion = 'gini', random_state = 500, max_depth = 200, min_samples_leaf = 5)
 
     adb_clf = AdaBoostClassifier(tree_clf, algorithm="SAMME", n_estimators=200)
     adb_clf.fit(X_train, Y_train)
@@ -60,7 +60,15 @@ def cal_accuracy(y_test, y_pred):
 
 
 if __name__ == "__main__":
-    X_tr, X_te, Y_tr, Y_te = load_data()
+    #X_tr, X_te, Y_tr, Y_te = load_data()
+    data = pd.read_csv('../NN/train_SMOTE.csv', sep = ',', header = None)
+    X_tr = data.values[1:, 2:]
+    Y_tr = data.values[1:, 1]
+
+    data = pd.read_csv('../NN/train.csv', sep = ',', header = None)
+    X_te = data.values[1:, 2:]
+    Y_te = data.values[1:, 1]
+    
     clf = train(X_tr, X_te, Y_tr, Y_te)
     y_pred = prediction(X_te, clf) 
     cal_accuracy(Y_te, y_pred) 

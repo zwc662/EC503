@@ -28,15 +28,15 @@ criterion = torch.nn.CrossEntropyLoss()
 #optimizer = torch.optim.SGD(net.parameters(), lr=1e-4, momentum = 0.9)
 optimizer = torch.optim.Adam(net.parameters(), lr=0.0001, betas=(0.9, 0.999), eps=1e-08, weight_decay=0)
 
-def train(path = 'train_SMOTE.csv', checkpoint = None, num_epoch = 100):
+def train(path = 'train_SMOTE.csv', model_name = 'mlp', checkpoint = None, num_epoch = 100):
     dataset = create_dataset(path)
 
-    epoch_init = -1
+    epoch_init = 0
     if checkpoint is not None:
         checkpoint = torch.load(checkpoint)
         net.load_state_dict(checkpoint['model_state_dict'])
         optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
-        epoch_init = checkpoint['epoch']
+        epoch_init = checkpoint['epoch'] + 1
         loss = checkpoint['loss']
         net.eval()
         loss.backward()
@@ -44,7 +44,7 @@ def train(path = 'train_SMOTE.csv', checkpoint = None, num_epoch = 100):
     
     
     
-    for epoch in range(epoch_init + 1, num_epoch + epoch_init + 1):  # loop over the dataset multiple times
+    for epoch in range(epoch_init, num_epoch + epoch_init):  # loop over the dataset multiple times
         dataloader = data_utils.DataLoader(dataset, batch_size = size_batch, shuffle = True)
     
         running_loss = 0.0
@@ -71,8 +71,9 @@ def train(path = 'train_SMOTE.csv', checkpoint = None, num_epoch = 100):
                 print('[%d, %5d] loss: %.3f' %
                       (epoch + 1, i + 1, running_loss / 2000))
                 running_loss = 0.0
+
         if epoch % 10 == 0:
-            torch.save({'epoch': epoch, 'model_state_dict': net.state_dict(), 'optimizer_state_dict': optimizer.state_dict(), 'loss': loss}, str('checkpoints/mlp' + str(epoch) + '.pt'))
+            torch.save({'epoch': epoch, 'model_state_dict': net.state_dict(), 'optimizer_state_dict': optimizer.state_dict(), 'loss': loss}, str('checkpoints/' + model_name +  str(epoch) + '.pt'))
     
     print('Finished Training')
 
@@ -110,12 +111,30 @@ def test(path = 'train.csv', checkpoint = 'checkpoints/mlp1.pt'):
             fp += np.sum((outputs == 1) * (labels == 0))
             tn += np.sum((outputs == 0) * (labels == 0))
             fn += np.sum((outputs == 0) * (labels == 1))
-    
+            
+    precision = tp * 1.0/(tp + fp * 1.0)
+    recall = tp * 1.0/(tp + fn * 1.0)
+    f1 = 2 * precision * recall/(precision + recall)
+
     print("Accuracy: %f" % (corr * 1.0/tot))
     print("True Positive Number: {}\nFalse Positive Number: {}\nTrue Negative Number: {}\nFalse Negative Number: {}".format(tp, fp, tn, fn))
-    print("Precision: {}\nRecall: {}\n".format((tp * 1.0/(tp + fp * 1.0)), (tp * 1.0/(tp + fn * 1.0))))
+    print("Precision: {}\nRecall: {}".format((tp * 1.0/(tp + fp * 1.0)), (tp * 1.0/(tp + fn * 1.0))))
+    print("F-1 Score: {}\n".format(f1))
 
 
 if __name__ == '__main__':
-    train(checkpoint = 'checkpoints/mlp500.pt', num_epoch = 500)
-    test(checkpoint = 'checkpoints/mlp1000.pt')
+    print("Original data set")
+    #train(path = './train.csv', model_name = 'original', checkpoint = None, num_epoch = 101)
+    test(checkpoint = 'checkpoints/original100.pt')
+
+    print("SMOTE synthetic data generation:")
+    #train(checkpoint = 'checkpoints/mlp500.pt', num_epoch = 500)
+    test(checkpoint = 'checkpoints/mlp980.pt')
+
+    print("GAN synthetic data generation:")
+    #train(path = './GAN/train_GAN.csv', model_name = 'train_GAN_MLP700', num_epoch = 400) 
+    test(checkpoint = 'checkpoints/train_GAN_MLP400.pt')
+
+    print("WGAN synthetic data generation:")
+    #train(path = './GAN/train_WGAN.csv', model_name = 'train_WGAN_MLP', checkpoint = 'checkpoints/train_WGAN_MLP90.pt', num_epoch = 500) 
+    test(checkpoint = 'checkpoints/train_WGAN_MLP500.pt')
